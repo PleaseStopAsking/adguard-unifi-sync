@@ -1,0 +1,17 @@
+services:
+  adguard-unifi-sync:
+    build:
+      context: .
+    container_name: adguard-unifi-sync
+    hostname: adguard-unifi-sync
+    restart: always
+    environment:
+      - UNIFI_URL=https://10.0.0.1
+      - UNIFI_USERNAME=admin
+      - UNIFI_PW=changeme
+      - ADGUARD_URL=http://10.0.0.48
+      - ADGUARD_USERNAME=admin
+      - ADGUARD_PW=changeme
+      - IGNORED_NETWORKS=Guest,Untrusted
+      - CRON="*/30 * * * *"
+      - RUN_ON_START=true

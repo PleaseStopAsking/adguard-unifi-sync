@@ -1,0 +1,11 @@
+{
+	"name": "unifi-adguard-sync",
+	"image": "mcr.microsoft.com/devcontainers/python:2-3.14-trixie",
+	"features": {
+		"ghcr.io/devcontainers/features/git:1": {
+			"ppa": true,
+			"version": "latest"
+		}
+	},
+	"postCreateCommand": "pip3 install --user -r requirements.txt"
+}

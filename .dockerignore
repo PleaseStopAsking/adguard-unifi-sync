@@ -1,0 +1,11 @@
+# Reduce build context size
+.git
+.gitignore
+.vscode/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.swp
+.env
+*.log

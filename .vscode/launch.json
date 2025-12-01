@@ -1,0 +1,51 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug Unifi-AdGuard Sync (flags)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/unifi_adguard_client_sync.py",
+      "console": "integratedTerminal",
+      "args": [
+        "--unifi-url",
+        "https://10.0.0.1",
+        "--unifi-username",
+        "admin",
+        "--adguard-url",
+        "http://10.0.0.48",
+        "--adguard-username",
+        "admin",
+        "--unifi-password",
+        "changeme",
+        "--adguard-password",
+        "changeme",
+        "--ignored-networks",
+        "Guest,Untrusted"
+      ],
+      "env": {
+        "PYTHONUNBUFFERED": "1"
+      },
+      "justMyCode": true
+    },
+    {
+      "name": "Debug Unifi-AdGuard Sync (env vars)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/unifi_adguard_client_sync.py",
+      "console": "integratedTerminal",
+      "args": [],
+      "env": {
+        "UNIFI_URL": "https://10.0.0.1",
+        "UNIFI_USERNAME": "admin",
+        "UNIFI_PW": "changeme",
+        "ADGUARD_URL": "http://10.0.0.48",
+        "ADGUARD_USERNAME": "admin",
+        "ADGUARD_PW": "changeme",
+        "IGNORED_NETWORKS": "Guest,Untrusted",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "justMyCode": true
+    }
+  ]
+}
