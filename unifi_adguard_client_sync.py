@@ -16,7 +16,7 @@ Passwords:
 """
 __author__ = "PleaseStopAsking"
 __maintainer__ = "PleaseStopAsking"
-__version__ = 1.0
+__version__ = "1.0.0"
 
 import os
 from datetime import timezone, datetime
