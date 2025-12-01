@@ -39,7 +39,7 @@ jobs:
 
       - name: Extract metadata for image
         id: meta
-        uses: docker/metadata-action@v5.9.0
+        uses: docker/metadata-action@v5.10.0
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
