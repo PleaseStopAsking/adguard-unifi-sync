@@ -7,7 +7,7 @@ Usage:
     unifi_adguard_client_sync.py \
         --unifi-url URL --unifi-username USER [--unifi-password PW] \
         --adguard-url URL --adguard-username USER [--adguard-password PW] \
-        [--ignored-networks NET1 NET2]
+        [--ignored-networks NET1 NET2] [--exclude-dynamic-ips]
 
 Passwords:
     You may supply passwords either via optional CLI flags or environment variables. If a flag is omitted,
@@ -41,6 +41,8 @@ def parse_args():
     parser.add_argument("--adguard-password", dest="adguard_password", required=False, help="AdGuard password (or set ADGUARD_PW)")
     parser.add_argument("--ignored-networks", dest="ignored_networks", required=False,
                         help="Comma-delimited list of network names to ignore (e.g., 'Guest,IoT')")
+    parser.add_argument("--exclude-dynamic-ips", dest="exclude_dynamic_ips", action="store_true",
+                        help="Exclude Unifi clients without a fixed/static IP and log them for review")
     args = parser.parse_args()
 
     # fallback to environment variables if flags not supplied
@@ -268,6 +270,49 @@ def main():
     unifi_login(session, args)
     print("[sync] Retrieving active clients from Unifi...")
     unifi_clients = unifi_get_active_clients(session, args)
+    skipped_dynamic_clients = []
+    if args.exclude_dynamic_ips:
+        filtered_unifi_clients = {}
+        for mac, client in unifi_clients.items():
+            if client.get("fixed_ip"):
+                filtered_unifi_clients[mac] = client
+            else:
+                skipped_dynamic_clients.append(client)
+        unifi_clients = filtered_unifi_clients
+
+        if skipped_dynamic_clients:
+            print("[sync] Skipped clients without static IP assignments:")
+            for client in sorted(skipped_dynamic_clients, key=lambda c: (c.get("alias") or c.get("name") or c.get("display_name") or "")):
+                alias = client.get("alias")
+                assigned_name = client.get("name")
+                display_name = client.get("display_name")
+                hostname = client.get("hostname")
+                mac = client.get("mac", "unknown")
+                ip = client.get("ip", "unknown")
+                network_name = client.get("network_name", "unknown")
+
+                # Avoid generic or MAC-derived labels such as "Mac" as the primary display.
+                normalized_display = (display_name or "").strip().lower()
+                generic_display = normalized_display in {"", "mac", "unknown", "unnamed"}
+                log_name = alias or assigned_name or hostname or (display_name if not generic_display else None) or "unassigned-device"
+                parts = [f"[sync]   - {log_name}"]
+                if alias:
+                    parts.append(f"Alias: {alias}")
+                if assigned_name:
+                    parts.append(f"Assigned Name: {assigned_name}")
+                elif hostname:
+                    parts.append(f"Hostname: {hostname}")
+                if display_name and display_name != log_name:
+                    parts.append(f"Display Name: {display_name}")
+                parts.extend([
+                    f"MAC: {mac}",
+                    f"Current IP: {ip}",
+                    f"Network: {network_name}",
+                ])
+                print(" | ".join(parts))
+            print(f"[sync] Total skipped (dynamic IP): {len(skipped_dynamic_clients)}")
+        else:
+            print("[sync] --exclude-dynamic-ips enabled, no dynamic-IP clients found.")
 
     # login to adguard and retrieve clients
     adguard_login(session, args)
