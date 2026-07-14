@@ -11,17 +11,18 @@
         "--unifi-url",
         "https://10.0.0.1",
         "--unifi-username",
-        "admin",
+        "changeme",
         "--adguard-url",
         "http://10.0.0.48",
         "--adguard-username",
-        "admin",
+        "changeme",
         "--unifi-password",
         "changeme",
         "--adguard-password",
         "changeme",
         "--ignored-networks",
-        "Guest,Untrusted"
+        "Guest",
+        "--exclude-dynamic-ips"
       ],
       "env": {
         "PYTHONUNBUFFERED": "1"
@@ -37,12 +38,12 @@
       "args": [],
       "env": {
         "UNIFI_URL": "https://10.0.0.1",
-        "UNIFI_USERNAME": "admin",
+        "UNIFI_USERNAME": "changeme",
         "UNIFI_PW": "changeme",
         "ADGUARD_URL": "http://10.0.0.48",
-        "ADGUARD_USERNAME": "admin",
+        "ADGUARD_USERNAME": "changeme",
         "ADGUARD_PW": "changeme",
-        "IGNORED_NETWORKS": "Guest,Untrusted",
+        "IGNORED_NETWORKS": "Guest",
         "PYTHONUNBUFFERED": "1"
       },
       "justMyCode": true
