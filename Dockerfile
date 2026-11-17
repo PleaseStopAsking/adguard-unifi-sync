@@ -1,4 +1,4 @@
-FROM python:3.15.2-slim
+FROM python:3.16.0a2-slim
 
 LABEL org.opencontainers.image.title="adguard-unifi-sync" \
       org.opencontainers.image.description="Sync active Unifi clients into AdGuard Home client list" \
